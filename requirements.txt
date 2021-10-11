@@ -7,7 +7,7 @@ colorama==0.4.4
 contextvars==2.4
 cycler==0.10.0
 cymem==2.0.5
-dataclasses==0.8
+dataclasses
 en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.1.0/en_core_web_sm-3.1.0-py3-none-any.whl
 et-xmlfile==1.1.0
 Flask==2.0.2
