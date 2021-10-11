@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Sentiment Analysis</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="../static/assets/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../static/assets/vendors/css/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="../static/assets/css/style.css">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="../static/assets/images/favicon.ico" />
+  </head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:partials/_navbar.html -->
+      <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+          <a class="navbar-brand brand-logo" href="index.html"><img src="../static/assets/images/logo.svg" alt="logo" /></a>
+          <a class="navbar-brand brand-logo-mini" href="index.html"><img src="../static/assets/images/logo-mini.svg" alt="logo" /></a>
+        </div>
+      </nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_sidebar.html -->
+        <nav class="sidebar sidebar-offcanvas" id="sidebar">
+          <ul class="nav">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">
+                <span class="menu-title">Dashboard</span>
+                <i class="mdi mdi-home menu-icon"></i>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            {% if return_name %}
+            <div class="row">
+              <div class="col-md-12 stretch-card grid-margin">
+                <div class="card bg-gradient-success card-img-holder text-white">
+                  <div class="card-body">
+                    <img src="../static/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+                    <h5 class="card-text display-4">Reviews are based on the <span class="text-behance">{{return_name}}</span></h5>
+                  </div>
+                </div>
+              </div>
+            </div>  <!-- City or State Names -->
+            {% endif %}
+             <div class="page-header">
+               <nav aria-label="breadcrumb">
+                <form action="/download" method="Post">
+                 <button type="submit" class="btn btn-gradient-info btn-icon-text"> Download
+                   <i class="mdi mdi-printer btn-icon-append"></i>
+                 </button>
+                </form>
+               </nav>
+             </div>
+            <div class="row">
+               <div class="col-md-4 stretch-card grid-margin">
+                <div class="card bg-gradient-primary card-img-holder text-white">
+                  <div class="card-body">
+                    <img src="../static/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+                    <h4 class="font-weight-normal mb-5">Total Feedbacks
+                    </h4>
+                    <h2 class="mb-5">{{total}} Total Reviews</h2>
+                    <h6 class="card-text display-5">{{t_percent}} </h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 stretch-card grid-margin">
+                <div class="card bg-gradient-success card-img-holder text-white">
+                  <div class="card-body">
+                    <img src="../static/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+                     <i class="mdi mdi-emoticon-happy mdi-24px float-right"></i>
+                    <h4  class="font-weight-normal mb-5">Positive Feedbacks
+                    </h4>
+                    <h2 class="mb-5">{{p_count}} Positive Reviews</h2>
+                    <h6 class="card-text display-5">Positive Percent is {{p_percent}}% </h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 stretch-card grid-margin">
+                <div class="card bg-gradient-warning card-img-holder text-white">
+                  <div class="card-body">
+                    <img src="../static/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+                     <i class="mdi mdi-emoticon-neutral mdi-24px float-right"></i>
+                    <h4 class="font-weight-normal mb-5">Neutral Feedbacks
+                    </h4>
+                    <h2 class="mb-5">{{ne_count}} Neutral Reviews</h2>
+                    <h6 class="card-text display-5">Neutral Percent is {{ne_percent}}% </h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 stretch-card grid-margin">
+                <div class="card bg-gradient-danger card-img-holder text-white">
+                  <div class="card-body">
+                    <img src="../static/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+                    <i class="mdi mdi-emoticon-sad mdi-24px float-right"></i>
+                    <h4 class="font-weight-normal mb-5">Negative Feedbacks
+                    </h4>
+                    <h2 class="mb-5">{{n_count}} Negative Reviews</h2>
+                    <h6 class="card-text display-5">Negative Percent is {{n_percent}}% </h6>
+                  </div>
+                </div>
+              </div>
+            </div>  <!-- counts -->
+            <div class="row">
+              <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                      <h4 class="card-title align-content-center">Pie Chart based on Review Percentage</h4>
+                    <canvas id="pieChart1" style="height: 250px; display: block; width: 500px;" width="500" height="250" class="chartjs-render-monitor"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Star Rating based on Reviews</h4>
+                    <canvas id="bargraph"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>  <!-- ratings -->
+            <!-- keywords frequency -->
+            <div class="row">
+              <div class="col-md-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Top 10 Positive Words</h4>
+                    <canvas id="poswords"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Top 10 Negative Words</h4>
+                    <canvas id="negwords"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="text-center display-4 text-dark" style="text-align: center">Word Clouds for Positive Feedbacks</h4>
+                    <!-- image wordcloud positive -->
+                    <div class="mb-2 mw-50 w-50 rounded absolute-center">{{pos_image|safe}}</div>
+                  </div>
+                </div>
+              </div><!-- wordcloud -->
+              <div class="col-md-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="text-center display-4 text-dark" style="text-align: center">Word Clouds for Negative Feedbacks</h4>
+                    <!-- image wordcloud Negative -->
+                    <div class="mb-2 mw-50 w-50 rounded absolute-center">{{neg_image|safe}}</div>
+                  </div>
+                </div>
+              </div>
+            </div> <!-- negative wordcloud -->
+
+            {% if pos_state %}
+            <div class="row">
+              <div class="col-md-6 grid-margin stretch-card">
+                <div class="card bg-gradient-success">
+                  <div class="card-body ">
+                    <h4 class="card-title">Top 5 States got most Positive Feedbacks</h4>
+                    <div class="table-responsive">
+                      <table class="table  ">
+                        <thead>
+                          <tr>
+                            <th class="text-light" style="font-size: large"> # </th>
+                            <th class="text-avatar" style="font-size: large"> State Name </th>
+                            <th class="text-avatar" style="font-size: large"> Positive Counts </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for x in pos_state %}
+                          <tr>
+                            <td class="py-1"><i class="mdi mdi-adjust text-light"></i></td>
+                            {% for xx in x %}
+                            <td> {{xx}} </td>
+                            {% endfor %}
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 grid-margin stretch-card">
+                <div class="card bg-gradient-success">
+                  <div class="card-body"><h4 class="card-title">Top 5 Cities got most Positive Feedbacks</h4>
+                    <div class="table-responsive">
+                      <table class="table ">
+                        <thead>
+                          <tr>
+                            <th class="text-light" style="font-size: large"> # </th>
+                            <th class="text-avatar" style="font-size: large"> City Name </th>
+                            <th class="text-avatar" style="font-size: large"> Positive Counts </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for x in pos_city %}
+                          <tr>
+                            <td class="py-1"><i class="mdi mdi-adjust text-light"></i></td>
+                            {% for xx in x %}
+                            <td> {{xx}} </td>
+                            {% endfor %}
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>  <!-- positive state and cities -->
+             <div class="row">
+              <div class="col-md-6 grid-margin stretch-card">
+                <div class="card bg-gradient-warning">
+                  <div class="card-body ">
+                    <h4 class="card-title">Top 5 States got most Neutral Feedbacks</h4>
+                    <div class="table-responsive">
+                      <table class="table  ">
+                        <thead>
+                          <tr>
+                            <th class="text-light" style="font-size: large"> # </th>
+                            <th class="text-avatar" style="font-size: large"> State Name </th>
+                            <th class="text-avatar" style="font-size: large"> Neutral Counts </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for x in neu_state %}
+                          <tr>
+                            <td class="py-1"><i class="mdi mdi-adjust text-light"></i></td>
+                            {% for xx in x %}
+                            <td> {{xx}} </td>
+                            {% endfor %}
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 grid-margin stretch-card">
+                <div class="card bg-gradient-warning">
+                  <div class="card-body"><h4 class="card-title">Top 5 Cities got most Neutral Feedbacks</h4>
+                    <div class="table-responsive">
+                      <table class="table ">
+                        <thead>
+                          <tr>
+                            <th class="text-light" style="font-size: large"> # </th>
+                            <th class="text-avatar" style="font-size: large"> City Name </th>
+                            <th class="text-avatar" style="font-size: large"> Neutral Counts </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for x in neu_city %}
+                          <tr>
+                            <td class="py-1"><i class="mdi mdi-adjust text-light"></i></td>
+                            {% for xx in x %}
+                            <td> {{xx}} </td>
+                            {% endfor %}
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 grid-margin stretch-card">
+                <div class="card bg-gradient-danger">
+                  <div class="card-body">
+                    <h4 class="card-title">Top 5 State got most Negative Feedbacks</h4>
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th class="text-light" style="font-size: large"> # </th>
+                            <th class="text-avatar" style="font-size: large"> State Name </th>
+                            <th class="text-avatar" style="font-size: large"> Negative Counts </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for x in neg_state %}
+                          <tr>
+                            <td class="py-1"><i class="mdi mdi-adjust text-light"></i></td>
+                            {% for xx in x %}
+                            <td> {{xx}} </td>
+                            {% endfor %}
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 grid-margin stretch-card">
+                <div class="card bg-gradient-danger">
+                  <div class="card-body"><h4 class="card-title">Top 5 Cities got most Negative Feedbacks</h4>
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th class="text-light" style="font-size: large"> # </th>
+                            <th class="text-avatar" style="font-size: large"> City Name </th>
+                            <th class="text-avatar" style="font-size: large"> Negative Counts </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for x in neg_city %}
+                          <tr>
+                            <td class="py-1"><i class="mdi mdi-adjust text-light"></i></td>
+                            {% for xx in x %}
+                            <td> {{xx}} </td>
+                            {% endfor %}
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>  <!-- negative state and cities -->
+            {% endif %}
+            <div class="row">
+              <div class="col-6 grid-margin">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Want to filter the review by specific States</h4>
+                    <p class="card-description"> Enter the <span class="text-info">State Name</span> </p>
+                    <form action="/state" class="form-inline" method="POST" enctype="multipart/form-data">
+                      <input type="text" class="form-control mb-2 mr-sm-2" id="city_name" name="city_name" placeholder="Enter City Name">
+                      <button type="submit" class="btn btn-outline-info btn-icon-text mb-2 mr-sm-2">
+                            <i class="mdi mdi-file-check btn-icon-prepend"></i> Submit </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div>  <!-- search by city or state -->
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+         </div>
+
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="../static/assets/vendors/js/vendor.bundle.base.js"></script>
+    <script src="../static/assets/vendors/chart.js/Chart.min.js"></script>
+    <script src="../static/assets/js/off-canvas.js"></script>
+    <script src="../static/assets/js/hoverable-collapse.js"></script>
+    <script src="../static/assets/js/misc.js"></script>
+    <script src="../static/assets/js/dashboard.js"></script>
+    <script src="../static/assets/js/todolist.js"></script>
+    <script src="../static/assets/js/chart.js"></script>
+    <script src="https://github.com/chartjs/Chart.js/blob/master/docs/scripts/utils.js"></script>
+    <!-- End custom js for this page -->
+    <script>
+     const data1 = [{{p_percent}}, {{ne_percent}},{{n_percent}}]
+      const data = {
+    labels: ['Positive', 'Neutral', 'Negative'],
+    datasets: [
+      {
+        data: data1,
+        backgroundColor: [
+          'rgb(218,171,10)',
+          'rgb(204,25,76)',
+          'rgb(42,104,210)',
+        ],
+           borderColor: [
+          'rgb(218,171,10)',
+          'rgb(204,25,76)',
+          'rgb(42,104,210)',
+        ],
+      }
+    ]
+  };
+      const config = {
+  type: 'pie',
+  data: data,
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: 'false'
+      }
+    }
+  },
+};
+      let mypieChart = document.getElementById('pieChart1').getContext('2d');
+      new Chart(mypieChart, config);
+const labels2 = ['1', '2', '3', '4', '5'];
+      const data2 = {
+    labels: labels2,
+    datasets: [
+      {
+        label: 'Positive',
+        data: {{star_pos}},
+        backgroundColor: [
+          'rgb(255,198,1)',
+          'rgb(255,198,1)',
+          'rgb(255,198,1)',
+          'rgb(255,198,1)',
+          'rgb(255,198,1)',
+        ],
+      },
+      {
+        label: 'Neutral',
+        data: {{star_neu}},
+        backgroundColor: [
+          'rgb(40,180,40)',
+          'rgb(40,180,40)',
+          'rgb(40,180,40)',
+         'rgb(40,180,40)',
+          'rgb(40,180,40)',
+        ],
+      },
+      {
+        label: 'Negative',
+        data: {{star_neg}},
+        backgroundColor: [
+          'rgba(239,40,95,0.94)',
+          'rgba(239,40,95,0.94)',
+          'rgba(239,40,95,0.94)',
+          'rgba(239,40,95,0.94)',
+          'rgba(239,40,95,0.94)',
+        ],
+      },
+    ]
+  };
+      const config2 = {
+    type: 'bar',
+    data: data2,
+    options: {
+      plugins: {
+        title: {
+          display: false,
+          text: 'Chart.js Bar Chart - Stacked'
+        },
+      },
+      responsive: true,
+      scales: {
+        x: {
+          stacked: true,
+        },
+        y: {
+          stacked: true
+        }
+      }
+    }
+  };
+      let mypieChart2 = document.getElementById('bargraph').getContext('2d');
+      new Chart(mypieChart2, config2);
+
+        const pos_freq_data ={{pos_freq_count}};
+  const labels_freq = {{words|safe}};
+  const data_freq = {
+  labels: labels_freq,
+  datasets: [
+    {
+      label: 'Most Positive Keywords',
+      data: pos_freq_data,
+      backgroundColor: [
+        'rgb(190,168,23)',
+        'rgb(42,210,210)',
+        'rgb(35,51,51)',
+        'rgb(19,234,152)',
+        'rgba(0,181,233,0.5)',
+        'rgb(245,75,151)',
+        'rgb(180,29,29)',
+        'rgb(190,98,88)',
+        'rgb(255,106,0)',
+      ],
+    },
+  ]
+};
+  const config_freq = {
+  type: 'bar',
+  data: data_freq,
+  options: {
+    plugins: {
+      title: {
+        display: false,
+        text: 'Chart.js Bar Chart - Stacked'
+      },
+    },
+    responsive: true,
+    scales: {
+      x: {
+        stacked: true,
+      },
+      y: {
+        stacked: true
+      }
+    }
+  }
+};
+  let barchart2 = document.getElementById('poswords').getContext('2d');
+  new Chart(barchart2, config_freq);
+
+ const pos_freq_data1 ={{neg_freq_count}};
+  const labels_freq1 = {{words_neg|safe}};
+  const data_freq1 = {
+  labels: labels_freq1,
+  datasets: [
+    {
+      label: 'Most Negative Keywords',
+      data: pos_freq_data1,
+      backgroundColor: [
+        'rgb(190,168,23)',
+        'rgb(42,210,210)',
+        'rgb(35,51,51)',
+        'rgb(19,234,152)',
+        'rgba(0,181,233,0.5)',
+        'rgb(245,75,151)',
+        'rgb(180,29,29)',
+        'rgb(190,98,88)',
+        'rgb(255,106,0)',
+      ],
+    },
+  ]
+};
+  const config_freq1 = {
+  type: 'bar',
+  data: data_freq1,
+  options: {
+    plugins: {
+      title: {
+        display: false,
+        text: 'Chart.js Bar Chart - Stacked'
+      },
+    },
+    responsive: true,
+    scales: {
+      x: {
+        stacked: true,
+      },
+      y: {
+        stacked: true
+      }
+    }
+  }
+};
+  let barchart3 = document.getElementById('negwords').getContext('2d');
+  new Chart(barchart3, config_freq1);
+  </script>
+    <script>
+  </script>
+  </body>
+</html>
