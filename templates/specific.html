@@ -33,7 +33,7 @@
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
           <ul class="nav">
             <li class="nav-item">
-              <a class="nav-link" href="index.html">
+              <a class="nav-link" href="/index">
                 <span class="menu-title">Dashboard</span>
                 <i class="mdi mdi-home menu-icon"></i>
               </a>
@@ -399,7 +399,7 @@ const labels2 = ['1', '2', '3', '4', '5'];
     datasets: [
       {
         label: 'Positive',
-        data: {{postive_rating}},
+        data: {{star_pos}},
         backgroundColor: [
           'rgb(255,198,1)',
           'rgb(255,198,1)',
@@ -410,7 +410,7 @@ const labels2 = ['1', '2', '3', '4', '5'];
       },
       {
         label: 'Neutral',
-        data: {{neutral_rating}},
+        data: {{star_neu}},
         backgroundColor: [
           'rgb(40,180,40)',
           'rgb(40,180,40)',
@@ -421,7 +421,7 @@ const labels2 = ['1', '2', '3', '4', '5'];
       },
       {
         label: 'Negative',
-        data: {{negative_rating}},
+        data: {{star_neg}},
         backgroundColor: [
           'rgba(239,40,95,0.94)',
           'rgba(239,40,95,0.94)',
@@ -465,15 +465,15 @@ const labels2 = ['1', '2', '3', '4', '5'];
       label: 'Most Positive Keywords',
       data: pos_freq_data,
       backgroundColor: [
-        'rgb(190,168,23)',
-        'rgb(42,210,210)',
-        'rgb(35,51,51)',
-        'rgb(19,234,152)',
-        'rgba(0,181,233,0.5)',
         'rgb(245,75,151)',
-        'rgb(180,29,29)',
-        'rgb(190,98,88)',
-        'rgb(255,106,0)',
+        'rgb(245,75,151)',
+        'rgb(245,75,151)',
+        'rgb(245,75,151)',
+        'rgb(245,75,151)',
+        'rgb(245,75,151)',
+        'rgb(245,75,151)',
+        'rgb(245,75,151)',
+        'rgb(245,75,151)',
       ],
     },
   ]
@@ -512,14 +512,14 @@ const labels2 = ['1', '2', '3', '4', '5'];
       data: pos_freq_data1,
       backgroundColor: [
         'rgb(190,168,23)',
-        'rgb(42,210,210)',
-        'rgb(35,51,51)',
-        'rgb(19,234,152)',
-        'rgba(0,181,233,0.5)',
-        'rgb(245,75,151)',
-        'rgb(180,29,29)',
-        'rgb(190,98,88)',
-        'rgb(255,106,0)',
+        'rgb(190,168,23)',
+        'rgb(190,168,23)',
+        'rgb(190,168,23)',
+        'rgb(190,168,23)',
+        'rgb(190,168,23)',
+        'rgb(190,168,23)',
+        'rgb(190,168,23)',
+        'rgb(190,168,23)',
       ],
     },
   ]
